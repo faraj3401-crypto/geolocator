@@ -1,7 +1,5 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+/*import 'package:flutter/material.dart';
+//import 'package:drop_down_list/drop_down_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,57 +9,89 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  List data = [];
-  bool loading = false;
-
+class MyAppState extends State<MyApp> {
+  String? selectedcity="jordan";
+  List<String> cities = ["Syria", "Turkey", "Egypt"];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text(
-            "package",
-            style: TextStyle(color: Colors.black54, fontSize: 20),
+            "Repository",
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           elevation: 20,
           shadowColor: Colors.pinkAccent,
         ),
-        body: ListView(
+        body: DropdownButton(
+          value: selectedcity,
+          hint: Text("Choose city to visit "),
+          items: cities.map((city) {
+            return DropdownMenuItem(value: city, child: Text(city));
+          }).toList(),
+          onChanged: (String? newvalue) {
+            setState(() {
+              selectedcity = newvalue;
+            });
+          },
+        ),
+      ),
+    );
+  }
+}*/
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MaterialApp(home: MyScreen()));
+
+class MyScreen extends StatefulWidget {
+  const MyScreen({super.key});
+
+  @override
+  State<MyScreen> createState() => _MyScreenState();
+}
+
+class _MyScreenState extends State<MyScreen> {
+  String? selectedCity;
+  final List<String> cities = ['عمّان', 'دمشق', 'بيروت'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('DropdownButton')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: MaterialButton(
-                color: Colors.pinkAccent,
-                textColor: Colors.white12,
-                onPressed: () async {
-                  loading = true;
-                  setState(() {});
-                  final response = await get(
-                    Uri.parse("https://jsonplaceholder.typicode.com/posts"),
-                  );
-                  final responseBody = jsonDecode(response.body);
-                  data.addAll(responseBody);
-                  loading = false;
-                  setState(() {});
-                },
-                child: const Text('Http Request'),
-              ),
+            DropdownButton<String>(
+              value: selectedCity,
+              hint: const Text('اختر المدينة'),
+              isExpanded: true,
+              items: cities.map((city) {
+                return DropdownMenuItem<String>(
+                  value: city,
+                  child: Text(city),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedCity = newValue;
+                });
+              },
             ),
-            if (loading)
-              Center(child: CircularProgressIndicator()),
-            ...List.generate(
-              data.length,
-              (index) =>
-                  Card(child: ListTile(title: Text("${data[index]['title']}"))),
-            ),
+            const SizedBox(height: 20),
+            Text('المدينة المختارة: ${selectedCity ?? "لا شي"}'),
           ],
         ),
       ),
     );
   }
 }
+
