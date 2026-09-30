@@ -49,46 +49,63 @@ class MyAppState extends State<MyApp> {
 }*/
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MaterialApp(home: MyScreen()));
+void main() => runApp(const MaterialApp(home: FormScreen()));
 
-class MyScreen extends StatefulWidget {
-  const MyScreen({super.key});
+class FormScreen extends StatefulWidget {
+  const FormScreen({super.key});
 
   @override
-  State<MyScreen> createState() => _MyScreenState();
+  State<FormScreen> createState() => _FormScreenState();
 }
 
-class _MyScreenState extends State<MyScreen> {
+class _FormScreenState extends State<FormScreen> {
+  final _formKey = GlobalKey<FormState>();
   String? selectedCity;
   final List<String> cities = ['عمّان', 'دمشق', 'بيروت'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('DropdownButton')),
+      appBar: AppBar(title: const Text('DropdownButtonFormField')),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            DropdownButton<String>(
-              value: selectedCity,
-              hint: const Text('اختر المدينة'),
-              isExpanded: true,
-              items: cities.map((city) {
-                return DropdownMenuItem<String>(
-                  value: city,
-                  child: Text(city),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedCity = newValue;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            Text('المدينة المختارة: ${selectedCity ?? "لا شي"}'),
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              DropdownButtonFormField<String>(
+                value: selectedCity,
+                decoration: const InputDecoration(
+                  labelText: 'المدينة',
+                  border: OutlineInputBorder(),
+                ),
+                items: cities.map((city) {
+                  return DropdownMenuItem<String>(
+                    value: city,
+                    child: Text(city),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() => selectedCity = newValue);
+                },
+                validator: (String? value) {
+                  if (value == null) return 'من فضلك اختر مدينة';
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('تم اختيار $selectedCity')),
+                    );
+                  }
+                },
+                child: const Text('إرسال'),
+              ),
+            ],
+          ),
         ),
       ),
     );
