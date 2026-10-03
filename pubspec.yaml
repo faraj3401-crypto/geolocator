@@ -37,7 +37,22 @@ dependencies:
   awesome_dialog: ^3.3.0
   http: ^1.6.0
   drop_down_list: ^2.1.1
+  geolocator: ^14.1.1
+  geocoding: ^5.0.0
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "images/virus.jpg"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+
+
   flutter_test:
     sdk: flutter
 
@@ -75,11 +90,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+    - family: PlaywriteCAGuides
+      fonts:
+        - asset: lib/fontsgoogle/PlaywriteCAGuides-Regular.ttf 
+  #      - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
